@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { color-scheme: dark; }
+body { font-feature-settings: "cv11", "ss01"; }
+.leaflet-container { background: #0a0f1e; font: inherit; }
+.leaflet-tooltip { background: #0a0f1e; color: #e2e8f0; border: 1px solid rgba(255,255,255,.12); box-shadow: none; }
+.leaflet-control-attribution { background: rgba(6,9,19,.7) !important; color: #64748b !important; }
+.leaflet-control-attribution a { color: #94a3b8 !important; }
+.leaflet-bar a { background: #0d1426; color: #e2e8f0; border-color: rgba(255,255,255,.1); }
+::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background: #26324f; border-radius: 8px; }

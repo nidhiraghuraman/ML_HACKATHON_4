@@ -10,6 +10,13 @@ What it adds to each observation (all distances in metres, times in seconds):
   move_bearing   smoothed direction of travel, degrees (NaN when the vehicle is not moving
                  enough for a direction to be meaningful)
   bearing_valid  True when move_bearing is defined
+  feat_bearing, feat_bearing_valid
+                 heading used by the FEATURES (labels/evaluation always use move_bearing). With
+                 feature_bearing_mode "fixed" (default) these are copies of move_bearing/bearing_valid.
+                 With "adaptive", the centred window grows (3 s -> up to feature_bearing_max_half_window_s)
+                 until the displacement reaches feature_bearing_min_disp_m, so slow movers whose 1 Hz
+                 steps are smaller than the GPS noise still get a direction from a long-enough baseline;
+                 the heading is valid only if that displacement is reached.
   is_stationary  part of a "stay": all points within R metres of each other's anchor for >= W seconds
   is_spike       GPS jump: implausibly fast both into and out of this point
   gap_before     dt_prev_s > gap threshold     gap_after   dt_next_s > gap threshold
@@ -34,7 +41,28 @@ DEFAULTS = {
     "bearing_half_window_s": 3.0,
     "bearing_min_disp_m": 5.0,
     "spike_speed_mps": 70.0,
+    "feature_bearing_mode": "fixed",          # "fixed" (= move_bearing) or "adaptive"
+    "feature_bearing_min_disp_m": 20.0,       # adaptive: baseline length that makes noise small vs displacement
+    "feature_bearing_max_half_window_s": 30.0,
 }
+
+ADAPTIVE_HALF_WINDOWS_S = (3.0, 4.0, 6.0, 8.0, 10.0, 15.0, 20.0, 30.0, 45.0, 60.0)
+
+
+def adaptive_bearing(x: np.ndarray, y: np.ndarray, t: np.ndarray, min_disp: float, max_hw: float) -> tuple[np.ndarray, np.ndarray]:
+    """Heading from the smallest centred window (from ADAPTIVE_HALF_WINDOWS_S, <= max_hw) whose
+    displacement is >= min_disp. NaN / invalid where no such window exists."""
+    n = len(t)
+    brg = np.full(n, np.nan); ok = np.zeros(n, bool)
+    for hw in ADAPTIVE_HALF_WINDOWS_S:
+        if hw > max_hw:
+            break
+        jb = np.clip(np.searchsorted(t, t - hw), 0, n - 1)
+        jf = np.clip(np.searchsorted(t, t + hw, side="right") - 1, 0, n - 1)
+        dx, dy = x[jf] - x[jb], y[jf] - y[jb]
+        new = (~ok) & (np.hypot(dx, dy) >= min_disp)
+        brg[new] = bearing_deg(dx[new], dy[new]); ok |= new
+    return brg, ok
 
 
 def detect_stays(x: np.ndarray, y: np.ndarray, t: np.ndarray, radius_m: float, min_duration_s: float) -> np.ndarray:
@@ -108,6 +136,12 @@ def preprocess_track(track: pd.DataFrame, cfg: dict | None = None,
     valid = disp >= c["bearing_min_disp_m"]
     df["move_bearing"] = np.where(valid, bearing_deg(ddx, ddy), np.nan)
     df["bearing_valid"] = valid
+    if c.get("feature_bearing_mode", "fixed") == "adaptive":
+        fb, fv = adaptive_bearing(x, y, t, float(c["feature_bearing_min_disp_m"]), float(c["feature_bearing_max_half_window_s"]))
+    else:
+        fb, fv = df["move_bearing"].to_numpy(float), valid
+    df["feat_bearing"] = fb
+    df["feat_bearing_valid"] = fv
 
     # Stationary = part of a stay (see detect_stays). Per-step speed is NOT used because GPS
     # jitter makes a parked car look like it moves a few metres every second.

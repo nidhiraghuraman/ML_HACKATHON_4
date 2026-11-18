@@ -1,0 +1,15 @@
+{
+  "rule": "replace the current pipeline only if pooled training out-of-fold HMM point accuracy of (adaptive model + decoder re-tuned with the Phase 5 grid on training OOF) exceeds the current pipeline's; student-test reported only",
+  "adopted": true,
+  "results": {
+    "best_beta_m": 5.0,
+    "best_w_emission": 2.0,
+    "train_oof_point_acc_new": 0.9533586478040257,
+    "train_oof_point_acc_current": 0.9504284418159212,
+    "student_hmm_point_acc_current": 0.9730206073752712,
+    "student_arc_f1_mean_current": 0.9766588208712852,
+    "student_hmm_point_acc_adaptive_retuned": 0.9731561822125814,
+    "student_arc_f1_mean_adaptive_retuned": 0.9793122918100965
+  },
+  "minutes": 7.7713757713635765
+}

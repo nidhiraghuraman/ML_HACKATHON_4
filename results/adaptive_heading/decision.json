@@ -1,0 +1,31 @@
+{
+  "rule": "adopt iff mean CV Top-1 (5 Phase 3 trip-grouped folds) improves AND pooled out-of-fold HMM point accuracy on the 80 training trips improves; model hyperparameters and decoder settings fixed; student-test reported only; evaluator data not used",
+  "setting": {
+    "feature_bearing_mode": "adaptive",
+    "feature_bearing_min_disp_m": 20.0,
+    "feature_bearing_max_half_window_s": 30.0
+  },
+  "adopted": true,
+  "results": {
+    "cv_top1_old": 0.9225953999086638,
+    "cv_top1_new": 0.9422901435435798,
+    "cv_folds_improved": 5,
+    "cv_macro_f1_old": 0.935728516776732,
+    "cv_macro_f1_new": 0.9491651886260236,
+    "cv_log_loss_old": 0.06286944420869059,
+    "cv_log_loss_new": 0.05238242494888231,
+    "train_hmm_point_acc_old": 0.9504284418159212,
+    "train_hmm_point_acc_new": 0.9521959743270944,
+    "train_classifier_point_acc_old": 0.9252730266474007,
+    "train_classifier_point_acc_new": 0.9487348365200443,
+    "train_trips_hmm_better": 42,
+    "train_trips_hmm_worse": 17,
+    "student_hmm_point_acc_old": 0.9730206073752712,
+    "student_classifier_point_acc_old": 0.9421095444685467,
+    "student_arc_f1_mean_old": 0.9766588208712852,
+    "student_hmm_point_acc_new": 0.9718682212581344,
+    "student_classifier_point_acc_new": 0.9587174620390455,
+    "student_arc_f1_mean_new": 0.9808955870462318
+  },
+  "minutes": 9.773805244763691
+}

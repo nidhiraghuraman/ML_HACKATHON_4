@@ -1,19 +1,52 @@
+# Python environments
 venv/
+.venv/
 __pycache__/
 *.pyc
-.env
 .pytest_cache/
+.mypy_cache/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Frontend dependencies and builds
+node_modules/
+dist/
+
+# Logs
+*.log
+
+# Generated caches
+.DS_Store
 .ipynb_checkpoints/
-data/external_evaluator/
-Assessment and Plagiarism Policy.pdf
-Dataset Exploration.pdf
-Deliverables.pdf
-Models and Training Guidelines.pdf
-Main Guidelines.pdf
-PathSnap_Backend.zip
-PathSnap_phase1.zip
-PathSnap_phase2.zip
-PathSnap_phase3.zip
-PathSnap_student_materials.zip
+
+# External evaluator data - never publish
+**/data/external_evaluator/
+
+# Local datasets and archives
+data/
+*.zip
+
+# Old backend
+PathSnap_Backend/
+
+# Local student materials
 Student folder/
 Student folder.zip
+# Local datasets
+/data/
+
+# Final backend: include student test data
+!PathSnap_Backend_New/
+!PathSnap_Backend_New/PathSnap_Backend/
+!PathSnap_Backend_New/PathSnap_Backend/data/
+!PathSnap_Backend_New/PathSnap_Backend/data/raw/
+!PathSnap_Backend_New/PathSnap_Backend/data/raw/student_test/
+
+# Never include external evaluator data
+PathSnap_Backend_New/PathSnap_Backend/data/external_evaluator/
+
+# Archives
+*.zip

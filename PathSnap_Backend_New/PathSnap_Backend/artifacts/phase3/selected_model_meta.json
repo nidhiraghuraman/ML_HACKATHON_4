@@ -1,0 +1,46 @@
+{
+  "model": "hist_gradient_boosting",
+  "family": "Boosting ensemble",
+  "params": {
+    "max_iter": 300,
+    "learning_rate": 0.1,
+    "max_leaf_nodes": 31
+  },
+  "feature_columns": [
+    "dist_m",
+    "dist_rank",
+    "dist_minus_nearest_m",
+    "is_nearest",
+    "proj_frac",
+    "arc_length_m",
+    "bearing_diff_deg",
+    "bearing_valid",
+    "arc_has_twin",
+    "from_node_degree",
+    "to_node_degree",
+    "connects_prev",
+    "connects_next",
+    "speed_mps",
+    "step_m",
+    "dt_prev_s",
+    "dt_next_s",
+    "is_stationary",
+    "is_spike",
+    "gap_before",
+    "gap_after",
+    "n_candidates",
+    "radius_expanded"
+  ],
+  "train_labels": [
+    0,
+    1
+  ],
+  "trained_on": "all 80 train trips (labels 0/1)",
+  "seed": 42,
+  "sklearn": "1.5.2",
+  "python": "3.12.3",
+  "cv_top1_mean": 0.9186280026949479,
+  "size_mb": 1.100496,
+  "refit_s": 40.99838214299962,
+  "predict": "model.predict_proba(X[feature_columns])[:, 1] = probability that the candidate is the correct road"
+}

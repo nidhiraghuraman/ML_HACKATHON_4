@@ -87,8 +87,9 @@ def compute_features(obs: pd.DataFrame, cand: pd.DataFrame, info: pd.DataFrame, 
     out["arc_length_m"] = net.length_m[arcs]
     out["arc_bearing_deg"] = net.bearing[arcs]
 
-    mb = obs["move_bearing"].to_numpy(float)[rows]
-    bv = obs["bearing_valid"].to_numpy(bool)[rows]
+    # heading used by features: feat_* (see preprocessing; identical to move_bearing in "fixed" mode)
+    mb = obs["feat_bearing" if "feat_bearing" in obs else "move_bearing"].to_numpy(float)[rows]
+    bv = obs["feat_bearing_valid" if "feat_bearing_valid" in obs else "bearing_valid"].to_numpy(bool)[rows]
     diff = np.where(bv, angle_diff_deg(mb, net.bearing[arcs]), np.nan)
     out["bearing_diff_deg"] = diff
     out["move_bearing"] = mb
@@ -106,7 +107,8 @@ def compute_features(obs: pd.DataFrame, cand: pd.DataFrame, info: pd.DataFrame, 
 
     for col in ("speed_mps", "step_m", "dt_prev_s", "dt_next_s"):
         out[col] = obs[col].to_numpy(float)[rows]
-    for col in ("bearing_valid", "is_stationary", "is_spike", "gap_before", "gap_after"):
+    out["bearing_valid"] = bv.astype(np.int8)          # validity of the heading the features use
+    for col in ("is_stationary", "is_spike", "gap_before", "gap_after"):
         out[col] = obs[col].to_numpy(bool)[rows].astype(np.int8)
     out["n_candidates"] = ncand[rows].astype(np.int32)
     out["radius_expanded"] = info["radius_expanded"].to_numpy(bool)[rows].astype(np.int8)

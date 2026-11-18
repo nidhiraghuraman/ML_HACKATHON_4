@@ -1,0 +1,27 @@
+{
+  "model_hmm": {
+    "max_states": 8,
+    "beta_m": 5.0,
+    "w_emission": 2.0,
+    "sigma_m": 10.0,
+    "vmax_mps": 50,
+    "speed_slack_m": 30,
+    "max_route_m": 6000,
+    "gap_break_s": 60,
+    "backtrack_tol_m": 15,
+    "prob_floor": 1e-06
+  },
+  "distance_hmm": {
+    "max_states": 8,
+    "beta_m": 5.0,
+    "w_emission": 1.0,
+    "sigma_m": 5.0,
+    "vmax_mps": 50,
+    "speed_slack_m": 30,
+    "max_route_m": 6000,
+    "gap_break_s": 60,
+    "backtrack_tol_m": 15,
+    "prob_floor": 1e-06
+  },
+  "selected_with": "pooled point accuracy, training trips, out-of-fold probabilities of the adaptive-heading model"
+}
